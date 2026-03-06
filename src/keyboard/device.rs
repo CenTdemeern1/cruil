@@ -1,5 +1,5 @@
 use crate::{
-    CruilError, CruilResult, InputState, KeySet, ProtocolViolation,
+    CruilError, CruilResult, KeyboardInputState, KeySet, ProtocolViolation,
     keys::{
         Modifiers,
         raw::{KEY_ERR_OVF, KEY_NONE},
@@ -10,13 +10,13 @@ use hidapi::HidDevice;
 /// Allegedly, full-speed HID packets are still at most 64 bytes.
 const MAX_HID_PACKET_SIZE: usize = 64;
 
-pub struct InputDevice {
+pub struct KeyboardDevice {
     device: HidDevice,
     last_pressed: KeySet,
     buffer: [u8; MAX_HID_PACKET_SIZE],
 }
 
-impl InputDevice {
+impl KeyboardDevice {
     pub fn new(device: HidDevice) -> Self {
         Self {
             buffer: [0; _],
@@ -31,14 +31,14 @@ impl InputDevice {
         Ok(report)
     }
 
-    pub fn read(&mut self) -> CruilResult<InputState> {
+    pub fn read(&mut self) -> CruilResult<KeyboardInputState> {
         let report = self.read_raw()?;
         let report_length = report.len();
         let overflow = report.get(2) == Some(&KEY_ERR_OVF);
 
         if report_length == 0 || overflow {
             // Gracefully handle overflow and no response by returning last known state
-            return Ok(InputState {
+            return Ok(KeyboardInputState {
                 currently_pressed: self.last_pressed.clone(),
                 overflow,
                 ..Default::default()
@@ -65,7 +65,7 @@ impl InputDevice {
 
         self.last_pressed = currently_pressed.clone();
 
-        Ok(InputState {
+        Ok(KeyboardInputState {
             overflow,
             currently_pressed,
             just_pressed,

@@ -1,11 +1,11 @@
 #[cfg(target_os = "macos")]
 use crate::CruilError;
-use crate::{CruilResult, DeviceKind, InputDevice, InputState};
+use crate::{CruilResult, DeviceKind, KeyboardDevice, KeyboardInputState};
 use hidapi::{DeviceInfo, HidApi, HidError, HidResult};
 
 pub struct InputReader {
     hid: HidApi,
-    devices: Vec<InputDevice>,
+    devices: Vec<KeyboardDevice>,
 }
 
 impl InputReader {
@@ -71,18 +71,21 @@ impl InputReader {
         Err(false)
     }
 
-    fn attempt_open_device(&self, info: &DeviceInfo) -> CruilResult<InputDevice> {
-        let mut device = InputDevice::new(info.open_device(&self.hid)?);
+    fn attempt_open_device(&self, info: &DeviceInfo) -> CruilResult<KeyboardDevice> {
+        let mut device = KeyboardDevice::new(info.open_device(&self.hid)?);
         println!("Performing read check...");
         _ = device.read_raw()?;
         Ok(device)
     }
 
     pub fn read_all_raw(&mut self) -> CruilResult<Vec<&[u8]>> {
-        self.devices.iter_mut().map(InputDevice::read_raw).collect()
+        self.devices
+            .iter_mut()
+            .map(KeyboardDevice::read_raw)
+            .collect()
     }
 
-    pub fn read_all(&mut self) -> CruilResult<Vec<InputState>> {
-        self.devices.iter_mut().map(InputDevice::read).collect()
+    pub fn read_all(&mut self) -> CruilResult<Vec<KeyboardInputState>> {
+        self.devices.iter_mut().map(KeyboardDevice::read).collect()
     }
 }

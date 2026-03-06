@@ -1,16 +1,11 @@
 mod device_kind;
 pub use device_kind::*;
-mod input_device;
-pub use input_device::*;
 mod input_reader;
 pub use input_reader::*;
-mod input_state;
-pub use input_state::*;
-mod key_set;
-pub use key_set::*;
 mod error;
 pub use error::*;
-pub mod keys;
+mod keyboard;
+pub use keyboard::*;
 
 fn main() {
     let mut input_reader = InputReader::new().unwrap();

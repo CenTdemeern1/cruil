@@ -1,7 +1,7 @@
 use crate::KeySet;
 
 #[derive(Debug, Clone, Default)]
-pub struct InputState {
+pub struct KeyboardInputState {
     pub overflow: bool,
     pub currently_pressed: KeySet,
     pub just_pressed: KeySet,
