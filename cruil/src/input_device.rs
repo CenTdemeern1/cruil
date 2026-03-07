@@ -14,6 +14,13 @@ impl InputDevice {
             DeviceKind::Mouse => todo!(),
         }
     }
+
+    pub fn keyboard(self) -> Option<KeyboardDevice> {
+        match self {
+            Keyboard(d) => Some(d),
+            _ => None,
+        }
+    }
 }
 
 impl ReadableDevice for InputDevice {
