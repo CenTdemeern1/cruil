@@ -38,7 +38,7 @@ impl Cruil {
     /// // Opens the first available keyboard
     /// let keyboard = cruil
     ///     .open_first_available_with(|device_info| {
-    ///         DeviceKind::from_info(device_info) == Some(DeviceKind::Keyboard)
+    ///         matches!(DeviceKind::from_info(device_info), Ok(DeviceKind::Keyboard))
     ///     })
     ///     .unwrap();
     /// ```
