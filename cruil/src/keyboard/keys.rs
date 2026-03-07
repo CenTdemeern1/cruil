@@ -1,5 +1,7 @@
-//! Based on https://gist.github.com/MightyPork/6da26e382a7ad91b5496ee55fdc73db2 with heavy modifications
-//! and https://www.usb.org/sites/default/files/hut1_7.pdf
+//! All the different keyboard keys
+//!
+//! Based on <https://gist.github.com/MightyPork/6da26e382a7ad91b5496ee55fdc73db2> with heavy modifications
+//! and <https://www.usb.org/sites/default/files/hut1_7.pdf>
 
 use std::fmt::Display;
 
