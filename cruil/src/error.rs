@@ -27,6 +27,8 @@ pub enum CruilError {
     ProtocolViolation(ProtocolViolation),
     #[error("Unsupported device ({0:#X}, {1:#X})")]
     UnsupportedDeviceKind(u16, u16),
+    #[error("USB pipe stalled")]
+    PipeStalled,
     #[error("hidapi error: {0}")]
     HidApi(#[from] HidError),
 }
