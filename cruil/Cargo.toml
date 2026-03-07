@@ -7,3 +7,6 @@ edition = "2024"
 bitflags = "2.11.0"
 hidapi = { version = "2.6.5", default-features = false, features = ["linux-static-libusb", "macos-shared-device", "windows-native"] }
 thiserror = "2.0.18"
+
+[features]
+debug_logging = []

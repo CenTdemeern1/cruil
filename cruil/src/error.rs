@@ -25,6 +25,8 @@ pub enum CruilError {
     KeyboardError(KeyboardError),
     #[error("Protocol violation: {0}")]
     ProtocolViolation(ProtocolViolation),
+    #[error("Unsupported device ({0:#X}, {1:#X})")]
+    UnsupportedDeviceKind(u16, u16),
     #[error("hidapi error: {0}")]
     HidApi(#[from] HidError),
 }

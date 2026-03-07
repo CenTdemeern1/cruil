@@ -1,12 +1,12 @@
 use cruil::*;
 
 fn main() {
-    let mut input_reader = InputReader::new().unwrap();
+    let mut input_reader = Cruil::new().unwrap();
 
     if !input_reader.open_first_available_with(|d| {
         d.product_string()
             .is_some_and(|v| v.starts_with("Microsoft"))
-            && DeviceKind::from_info(d) == DeviceKind::Keyboard
+            && DeviceKind::from_info(d) == Some(DeviceKind::Keyboard)
     }) {
         panic!("Could not find/open Microsoft keyboard");
     }

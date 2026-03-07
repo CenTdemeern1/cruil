@@ -1,5 +1,5 @@
 use crate::{
-    CruilError, CruilResult, KeyboardInputState, KeySet, ProtocolViolation,
+    CruilError, CruilResult, KeySet, KeyboardInputState, ProtocolViolation, ReadableDevice,
     keys::{
         Modifiers,
         raw::{KEY_ERR_OVF, KEY_NONE},
@@ -17,22 +17,27 @@ pub struct KeyboardDevice {
 }
 
 impl KeyboardDevice {
-    pub fn new(device: HidDevice) -> Self {
+    pub(crate) fn new(device: HidDevice) -> Self {
         Self {
             buffer: [0; _],
             last_pressed: Default::default(),
             device,
         }
     }
+}
 
-    pub fn read_raw(&mut self) -> CruilResult<&[u8]> {
+impl ReadableDevice for KeyboardDevice {
+    type InputState = KeyboardInputState;
+
+    fn read_raw(&mut self, blocking: bool) -> CruilResult<&[u8]> {
+        self.device.set_blocking_mode(blocking)?;
         let read = self.device.read(&mut self.buffer)?;
         let report = &self.buffer[..read];
         Ok(report)
     }
 
-    pub fn read(&mut self) -> CruilResult<KeyboardInputState> {
-        let report = self.read_raw()?;
+    fn read(&mut self, blocking: bool) -> CruilResult<KeyboardInputState> {
+        let report = self.read_raw(blocking)?;
         let report_length = report.len();
         let overflow = report.get(2) == Some(&KEY_ERR_OVF);
 

@@ -412,35 +412,35 @@ pub enum Key {
     // 0xdd  Keypad Hexadecimal
     /// Keyboard Left Control
     ///
-    /// You probably want to check [Modifiers] instead!
+    /// You probably want to check [`Modifiers`] instead!
     LeftCtrl = KEY_LEFTCTRL,
     /// Keyboard Left Shift
     ///
-    /// You probably want to check [Modifiers] instead!
+    /// You probably want to check [`Modifiers`] instead!
     LeftShift = KEY_LEFTSHIFT,
     /// Keyboard Left Alt
     ///
-    /// You probably want to check [Modifiers] instead!
+    /// You probably want to check [`Modifiers`] instead!
     LeftAlt = KEY_LEFTALT,
     /// Keyboard Left Super
     ///
-    /// You probably want to check [Modifiers] instead!
+    /// You probably want to check [`Modifiers`] instead!
     LeftSuper = KEY_LEFTSUPER,
     /// Keyboard Right Control
     ///
-    /// You probably want to check [Modifiers] instead!
+    /// You probably want to check [`Modifiers`] instead!
     RightCtrl = KEY_RIGHTCTRL,
     /// Keyboard Right Shift
     ///
-    /// You probably want to check [Modifiers] instead!
+    /// You probably want to check [`Modifiers`] instead!
     RightShift = KEY_RIGHTSHIFT,
     /// Keyboard Right Alt
     ///
-    /// You probably want to check [Modifiers] instead!
+    /// You probably want to check [`Modifiers`] instead!
     RightAlt = KEY_RIGHTALT,
     /// Keyboard Right Super
     ///
-    /// You probably want to check [Modifiers] instead!
+    /// You probably want to check [`Modifiers`] instead!
     RightSuper = KEY_RIGHTSUPER,
 
     MediaPlaypause = KEY_MEDIA_PLAYPAUSE,
@@ -1039,35 +1039,35 @@ pub mod raw {
 
     /// Keyboard Left Control
     ///
-    /// You probably want to check [Modifiers](super::Modifiers) instead!
+    /// You probably want to check [`Modifiers`](super::Modifiers) instead!
     pub const KEY_LEFTCTRL: u8 = 0xe0;
     /// Keyboard Left Shift
     ///
-    /// You probably want to check [Modifiers](super::Modifiers) instead!
+    /// You probably want to check [`Modifiers`](super::Modifiers) instead!
     pub const KEY_LEFTSHIFT: u8 = 0xe1;
     /// Keyboard Left Alt
     ///
-    /// You probably want to check [Modifiers](super::Modifiers) instead!
+    /// You probably want to check [`Modifiers`](super::Modifiers) instead!
     pub const KEY_LEFTALT: u8 = 0xe2;
     /// Keyboard Left Super
     ///
-    /// You probably want to check [Modifiers](super::Modifiers) instead!
+    /// You probably want to check [`Modifiers`](super::Modifiers) instead!
     pub const KEY_LEFTSUPER: u8 = 0xe3;
     /// Keyboard Right Control
     ///
-    /// You probably want to check [Modifiers](super::Modifiers) instead!
+    /// You probably want to check [`Modifiers`](super::Modifiers) instead!
     pub const KEY_RIGHTCTRL: u8 = 0xe4;
     /// Keyboard Right Shift
     ///
-    /// You probably want to check [Modifiers](super::Modifiers) instead!
+    /// You probably want to check [`Modifiers`](super::Modifiers) instead!
     pub const KEY_RIGHTSHIFT: u8 = 0xe5;
     /// Keyboard Right Alt
     ///
-    /// You probably want to check [Modifiers](super::Modifiers) instead!
+    /// You probably want to check [`Modifiers`](super::Modifiers) instead!
     pub const KEY_RIGHTALT: u8 = 0xe6;
     /// Keyboard Right Super
     ///
-    /// You probably want to check [Modifiers](super::Modifiers) instead!
+    /// You probably want to check [`Modifiers`](super::Modifiers) instead!
     pub const KEY_RIGHTSUPER: u8 = 0xe7;
 
     pub const KEY_MEDIA_PLAYPAUSE: u8 = 0xe8;

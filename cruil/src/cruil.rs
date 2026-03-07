@@ -1,17 +1,17 @@
 #[cfg(target_os = "macos")]
 use crate::CruilError;
-use crate::{CruilResult, DeviceKind, KeyboardDevice, KeyboardInputState};
-use hidapi::{DeviceInfo, HidApi, HidError, HidResult};
+use crate::{CruilResult, DeviceKind, KeyboardDevice, KeyboardInputState, ReadableDevice as _};
+use hidapi::{DeviceInfo, HidApi, HidError};
 
-pub struct InputReader {
+pub struct Cruil {
     hid: HidApi,
-    devices: Vec<KeyboardDevice>,
 }
 
-impl InputReader {
-    pub fn new() -> HidResult<Self> {
+impl Cruil {
+    pub fn new() -> CruilResult<Self> {
         let hid = HidApi::new()?;
 
+        #[cfg(feature = "debug_logging")]
         for device in hid.device_list() {
             let name = device
                 .product_string()
@@ -26,10 +26,7 @@ impl InputReader {
             );
         }
 
-        Ok(InputReader {
-            hid,
-            devices: vec![],
-        })
+        Ok(Cruil { hid })
     }
 
     pub fn open_first_available_with(&mut self, condition: impl Fn(&DeviceInfo) -> bool) -> bool {
@@ -71,18 +68,12 @@ impl InputReader {
         Err(false)
     }
 
-    fn attempt_open_device(&self, info: &DeviceInfo) -> CruilResult<KeyboardDevice> {
+    fn attempt_open_device(&self, info: &DeviceInfo) -> CruilResult<Option<KeyboardDevice>> {
+        let kind = DeviceKind::from_info(info);
         let mut device = KeyboardDevice::new(info.open_device(&self.hid)?);
         println!("Performing read check...");
-        _ = device.read_raw()?;
+        _ = device.read_raw(false)?;
         Ok(device)
-    }
-
-    pub fn read_all_raw(&mut self) -> CruilResult<Vec<&[u8]>> {
-        self.devices
-            .iter_mut()
-            .map(KeyboardDevice::read_raw)
-            .collect()
     }
 
     pub fn read_all(&mut self) -> CruilResult<Vec<KeyboardInputState>> {
