@@ -27,10 +27,21 @@ impl Cruil {
         Ok(Cruil { hid })
     }
 
-    /// Returns the first device that meets the given condition and successfully opened.
+    /// Returns the first device that met the given condition and successfully opened.
     ///
     /// All errors of failed attempts are returned if no device was successfully opened.
     /// If no device met the given condition, this vec is empty and unallocated.
+    ///
+    /// ```no_run
+    /// # use cruil::*;
+    /// let mut cruil = Cruil::new().unwrap();
+    /// // Opens the first available keyboard
+    /// let keyboard = cruil
+    ///     .open_first_available_with(|device_info| {
+    ///         DeviceKind::from_info(device_info) == Some(DeviceKind::Keyboard)
+    ///     })
+    ///     .unwrap();
+    /// ```
     pub fn open_first_available_with(
         &mut self,
         condition: impl Fn(&DeviceInfo) -> bool,
@@ -59,6 +70,8 @@ impl Cruil {
     }
 
     /// Opens all keyboards and mice.
+    ///
+    /// Returns all devices that successfully opened, ignoring errors.
     pub fn open_all(&mut self) -> CruilResult<Vec<InputDevice>> {
         self.hid.refresh_devices()?;
         Ok(self
