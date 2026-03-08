@@ -24,7 +24,7 @@ impl InputDevice {
 }
 
 impl ReadableDevice for InputDevice {
-    type InputState = InputState;
+    type State = InputState;
 
     fn read_raw(&mut self, blocking: bool) -> CruilResult<&[u8]> {
         match self {
@@ -33,7 +33,7 @@ impl ReadableDevice for InputDevice {
         }
     }
 
-    fn read(&mut self, blocking: bool) -> CruilResult<Self::InputState> {
+    fn read(&mut self, blocking: bool) -> CruilResult<Self::State> {
         Ok(match self {
             InputDevice::Keyboard(keyboard_device) => {
                 InputState::Keyboard(keyboard_device.read(blocking)?)

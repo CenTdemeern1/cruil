@@ -1,5 +1,7 @@
 mod device_kind;
 pub use device_kind::*;
+mod threaded_reader;
+pub use threaded_reader::*;
 mod input_state;
 pub use input_state::*;
 mod input_device;

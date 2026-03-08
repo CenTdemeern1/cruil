@@ -26,8 +26,10 @@ impl KeyboardDevice {
     }
 }
 
+impl KeyboardDevice {}
+
 impl ReadableDevice for KeyboardDevice {
-    type InputState = KeyboardInputState;
+    type State = KeyboardInputState;
 
     fn read_raw(&mut self, blocking: bool) -> CruilResult<&[u8]> {
         self.device.set_blocking_mode(blocking)?;
@@ -36,7 +38,7 @@ impl ReadableDevice for KeyboardDevice {
         Ok(report)
     }
 
-    fn read(&mut self, blocking: bool) -> CruilResult<KeyboardInputState> {
+    fn read(&mut self, blocking: bool) -> CruilResult<Self::State> {
         let report = self.read_raw(blocking)?;
         let report_length = report.len();
         let overflow = report.get(2) == Some(&KEY_ERR_OVF);
