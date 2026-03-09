@@ -3,8 +3,14 @@ use crate::mouse::*;
 use crate::*;
 use hidapi::HidDevice;
 
+/// An opened input device, which is either a [`Keyboard`] or a [`Mouse`]. (The two types of devices Cruil has built-in support for)
+///
+/// # Usage
+///
 pub enum InputDevice {
+    /// The opened device is a keyboard.
     Keyboard(KeyboardDevice),
+    /// The opened device is a mouse.
     Mouse(MouseDevice),
 }
 use InputDevice::*;
@@ -17,6 +23,9 @@ impl InputDevice {
         }
     }
 
+    /// Turns this `InputDevice` into an <code>[Option]<[KeyboardDevice]></code>.
+    ///
+    /// Similarly to [`Result::ok`], this will consume `self` and discard the inner value if it was a [`Mouse`].
     pub fn keyboard(self) -> Option<KeyboardDevice> {
         match self {
             Keyboard(d) => Some(d),
@@ -24,6 +33,9 @@ impl InputDevice {
         }
     }
 
+    /// Turns this `InputDevice` into an <code>[Option]<[MouseDevice]></code>.
+    ///
+    /// Similarly to [`Result::ok`], this will consume `self` and discard the inner value if it was a [`Keyboard`].
     pub fn mouse(self) -> Option<MouseDevice> {
         match self {
             Mouse(d) => Some(d),
