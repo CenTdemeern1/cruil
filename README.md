@@ -21,7 +21,7 @@ Cruil uses [hidapi](https://github.com/libusb/hidapi) under the hood, so it inhe
 - macOS: requires input monitoring permissions
 - Linux, BSD, and other Unix: uses the libusb backend, so Bluetooth is unsupported
 
-## What this does NOT do
+## What cruil does NOT do
 
 - Handle keyboard layouts (as of now, this may change in the future if necessary)
 - Map keys or key combinations to typed characters

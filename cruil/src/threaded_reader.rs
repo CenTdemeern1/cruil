@@ -39,6 +39,12 @@ where
 
 /// A threaded reader that can be asynchronously polled for events.
 ///
+/// `ThreadedReader` will continuously read the given device on a background thread and send back parsed reports.
+///
+/// You can create one using [`ThreadedReader::start`].
+/// You can also use it like an [`Iterator`] by calling [`iter`](Self::iter), [`try_iter`](Self::try_iter), or [`into_iter`](Self::into_iter).
+///
+/// # Panic semantics
 /// This struct includes semantics for custom [`ReadableDevice`]s that might panic.
 /// The built in ones from Cruil should never panic. (If they ever do, please file a bug report!)
 ///
@@ -212,7 +218,18 @@ where
     T: ReadableDevice + Send + 'static,
     T::State: Send,
 {
-    reader: ThreadedReader<T>,
+    pub reader: ThreadedReader<T>,
+}
+
+impl<T> OwnedThreadedReaderIter<T>
+where
+    T: ReadableDevice + Send + 'static,
+    T::State: Send,
+{
+    /// Consumes the `OwnedThreadedReaderIter` and returns the inner [`ThreadedReader`].
+    pub fn into_inner(self) -> ThreadedReader<T> {
+        self.reader
+    }
 }
 
 impl<T> Iterator for OwnedThreadedReaderIter<T>
@@ -243,6 +260,17 @@ where
     T::State: Send,
 {
     reader: Option<ThreadedReader<T>>,
+}
+
+impl<T> ThreadedReaderTryIter<T>
+where
+    T: ReadableDevice + Send + 'static,
+    T::State: Send,
+{
+    /// Consumes the `ThreadedReaderTryIter` and returns the inner [`ThreadedReader`], if the internal thread hasn't panicked.
+    pub fn into_inner(self) -> Option<ThreadedReader<T>> {
+        self.reader
+    }
 }
 
 impl<T> Iterator for ThreadedReaderTryIter<T>

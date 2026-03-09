@@ -6,7 +6,12 @@ use hidapi::HidDevice;
 /// An opened input device, which is either a [`Keyboard`] or a [`Mouse`]. (The two types of devices Cruil has built-in support for)
 ///
 /// # Usage
+/// The `InputDevice` can either be [`read`](Self::read) directly to get an [`InputState`],
+/// a union enum of [`KeyboardInputState`] and [`MouseInputState`],
+/// or it can be narrowed down to a [`KeyboardDevice`] or [`MouseDevice`] by matching or
+/// using the [`keyboard`](Self::keyboard) and [`mouse`](Self::mouse) helper methods.
 ///
+/// For more information on reading input from devices, see [`ReadableDevice`].
 pub enum InputDevice {
     /// The opened device is a keyboard.
     Keyboard(KeyboardDevice),

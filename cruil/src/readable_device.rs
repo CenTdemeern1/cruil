@@ -9,6 +9,13 @@ use crate::CruilResult;
 ///
 /// Raw reports can also be read using [`read_raw`](Self::read_raw),
 /// which will return the raw bytes read without parsing them.
+///
+/// # Polling
+/// It is generally recommended to poll often, and exhaust all reports when polling, to not miss or delay reports.
+///
+/// The easiest way to do this is to use [`ThreadedReader`](crate::ThreadedReader),
+/// which will use a background thread to continuously read the device and send reports back.
+/// See its documentation for more information.
 pub trait ReadableDevice {
     /// The type of input state associated with this type of device.
     type State;
