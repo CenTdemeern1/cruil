@@ -1,4 +1,4 @@
-use crate::keys::raw::{KEY_ERR_POST_FAIL, KEY_ERR_UNDEFINED};
+use crate::keyboard::keys::raw::{KEY_ERR_POST_FAIL, KEY_ERR_UNDEFINED};
 use hidapi::HidError;
 use thiserror::Error;
 

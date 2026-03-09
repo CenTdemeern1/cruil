@@ -1,4 +1,4 @@
-use crate::keys::{Key, Modifiers};
+use super::keys::*;
 use std::{
     collections::HashSet,
     fmt::{Debug, Display},
@@ -31,8 +31,8 @@ impl KeySet {
         self.keys.contains(key)
     }
 
-    /// Returns whether the set contains the given modifier key.
-    pub fn contains_modifier(&self, modifiers: Modifiers) -> bool {
+    /// Returns whether the set contains the given modifier keys.
+    pub fn contains_modifiers(&self, modifiers: Modifiers) -> bool {
         self.modifiers.contains(modifiers)
     }
 

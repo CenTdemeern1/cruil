@@ -1,4 +1,4 @@
-use crate::KeySet;
+use super::KeySet;
 
 #[derive(Debug, Clone, Default)]
 pub struct KeyboardInputState {

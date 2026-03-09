@@ -1,3 +1,5 @@
+mod constants;
+pub use constants::*;
 mod device_kind;
 pub use device_kind::*;
 mod threaded_reader;
@@ -12,5 +14,5 @@ mod cruil;
 pub use cruil::*;
 mod error;
 pub use error::*;
-mod keyboard;
-pub use keyboard::*;
+pub mod keyboard;
+pub mod mouse;
