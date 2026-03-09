@@ -25,6 +25,20 @@ impl KeySet {
     pub fn any(&self) -> bool {
         !self.is_empty()
     }
+
+    /// Returns whether the set contains the given key.
+    pub fn contains_key(&self, key: &Key) -> bool {
+        self.keys.contains(key)
+    }
+
+    /// Returns whether the set contains the given modifier key.
+    pub fn contains_modifier(&self, modifiers: Modifiers) -> bool {
+        self.modifiers.contains(modifiers)
+    }
+
+    pub fn is_subset(&self, superset: &KeySet) -> bool {
+        superset.modifiers.contains(self.modifiers) && self.keys.is_subset(&superset.keys)
+    }
 }
 
 impl Display for KeySet {

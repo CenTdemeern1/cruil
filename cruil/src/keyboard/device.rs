@@ -1,7 +1,7 @@
 use crate::{
     CruilError, CruilResult, KeySet, KeyboardInputState, ProtocolViolation, ReadableDevice,
     keys::{
-        Modifiers,
+        Key, Modifiers,
         raw::{KEY_ERR_OVF, KEY_NONE},
     },
 };
@@ -10,6 +10,9 @@ use hidapi::HidDevice;
 /// Allegedly, full-speed HID packets are still at most 64 bytes.
 const MAX_HID_PACKET_SIZE: usize = 64;
 
+/// A keyboard device. Represents a HID keyboard.
+///
+/// This is usually equivalent to a single physical keyboard, but any singular physical USB device could pretend to be any number of keyboards.
 pub struct KeyboardDevice {
     device: HidDevice,
     last_pressed: KeySet,
@@ -26,7 +29,22 @@ impl KeyboardDevice {
     }
 }
 
-impl KeyboardDevice {}
+impl KeyboardDevice {
+    /// Returns whether the given key is pressed.
+    pub fn is_key_pressed(&self, key: &Key) -> bool {
+        self.last_pressed.contains_key(key)
+    }
+
+    /// Returns whether the given modifier key is pressed.
+    pub fn is_modifier_pressed(&self, modifiers: Modifiers) -> bool {
+        self.last_pressed.contains_modifier(modifiers)
+    }
+
+    /// Returns whether all the keys in the given set are pressed.
+    pub fn is_set_pressed(&self, set: KeySet) -> bool {
+        set.is_subset(&self.last_pressed)
+    }
+}
 
 impl ReadableDevice for KeyboardDevice {
     type State = KeyboardInputState;
