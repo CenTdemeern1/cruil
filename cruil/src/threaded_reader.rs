@@ -41,6 +41,14 @@ where
 ///
 /// This struct includes semantics for custom [`ReadableDevice`]s that might panic.
 /// The built in ones from Cruil should never panic. (If they ever do, please file a bug report!)
+///
+/// # Deinitializing
+/// Dropping this struct will gracefully shut down the thread and close the device in the background.
+///
+/// To shut down the thread and get back the device, use [`stop`](Self::stop) or [`try_stop`](Self::try_stop).
+///
+/// Unlike the stop functions, dropping the `ThreadedReader` does not have to wait for the internal thread to stop,
+/// and may thus be significantly faster because it's not bottlenecked by I/O.
 pub struct ThreadedReader<T>
 where
     T: ReadableDevice + Send + 'static,
