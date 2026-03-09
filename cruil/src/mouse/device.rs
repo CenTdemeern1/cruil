@@ -1,3 +1,5 @@
+//! Mouse support is still currently work-in-progress and a big hack
+
 use super::*;
 use crate::*;
 use hidapi::{HidDevice, MAX_REPORT_DESCRIPTOR_SIZE};
