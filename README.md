@@ -7,6 +7,7 @@
 On supported operating systems, this also includes Bluetooth HID devices.
 
 > [!WARNING]
+>
 > cruil is still really early in development.
 >
 > The entire API may change in the future.
@@ -31,7 +32,8 @@ Some ideas:
 
 - Report descriptor parsing, which breaks:
     - Linux, BSD, and other Unix support
-    - A lot of mice
+    - A lot of keyboards and mice
+        - Turns out that more advanced devices don't allow you to get off the hook easily anymore
 - Linux, BSD, and other Unix: Bluetooth
     - dependency limitation, will look into solving this in the future
 

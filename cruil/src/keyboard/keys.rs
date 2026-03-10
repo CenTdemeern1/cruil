@@ -17,7 +17,7 @@ bitflags! {
     ///
     /// For example:
     /// ```
-    /// # use cruil::keyboard::*;
+    /// # use cruil::keyboard::keys::*;
     /// // Let's pretend we got these from a KeyboardInputState
     /// let buttons = Modifiers::LCTRL | Modifiers::RSHIFT;
     ///
@@ -33,7 +33,7 @@ bitflags! {
     ///     // Which shift key is pressed?
     ///     buttons.intersection(Modifiers::SHIFT),
     ///     // The right one
-    ///     Modifiers::RIGHT
+    ///     Modifiers::RSHIFT
     /// );
     /// ```
     #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Hash)]

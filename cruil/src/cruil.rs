@@ -1,11 +1,18 @@
 use crate::{CruilError, CruilResult, DeviceKind, InputDevice};
 use hidapi::{DeviceInfo, HidApi, HidError};
 
+/// Cruil's main struct. Get started here!
 pub struct Cruil {
     hid: HidApi,
 }
 
 impl Cruil {
+    /// Create a new instance of Cruil.
+    ///
+    /// Each instance has its own copy of [`HidApi`] with its own device cache.
+    ///
+    /// Aside from allocating a new device cache,
+    /// creating multiple copies of Cruil is fairly cheap.
     pub fn new() -> CruilResult<Self> {
         let hid = HidApi::new()?;
 
@@ -27,6 +34,18 @@ impl Cruil {
         Ok(Cruil { hid })
     }
 
+    /// Refresh the device list.
+    pub fn refresh(&mut self) -> CruilResult<()> {
+        Ok(self.hid.refresh_devices()?)
+    }
+
+    /// Returns an iterator over the list of supported devices.
+    pub fn devices(&self) -> impl Iterator<Item = &DeviceInfo> {
+        self.hid
+            .device_list()
+            .filter(|&info| DeviceKind::from_info(info).is_ok())
+    }
+
     /// Returns the first device that met the given condition and successfully opened.
     ///
     /// All errors of failed attempts are returned if no device was successfully opened.
@@ -43,8 +62,8 @@ impl Cruil {
     ///     .unwrap();
     /// ```
     pub fn open_first_available_with(
-        &mut self,
-        condition: impl Fn(&DeviceInfo) -> bool,
+        &self,
+        mut condition: impl FnMut(&DeviceInfo) -> bool,
     ) -> Result<InputDevice, Vec<CruilError>> {
         let mut errors: Vec<CruilError> = vec![];
 
@@ -72,13 +91,22 @@ impl Cruil {
     /// Opens all keyboards and mice.
     ///
     /// Returns all devices that successfully opened, ignoring errors.
-    pub fn open_all(&mut self) -> CruilResult<Vec<InputDevice>> {
-        self.hid.refresh_devices()?;
-        Ok(self
-            .hid
+    pub fn open_all_with(
+        &self,
+        mut condition: impl FnMut(&DeviceInfo) -> bool,
+    ) -> Vec<InputDevice> {
+        self.hid
             .device_list()
+            .filter(|&info| condition(info))
             .filter_map(|info| self.attempt_open_device_with_retry(info).ok())
-            .collect())
+            .collect()
+    }
+
+    /// Opens all keyboards and mice.
+    ///
+    /// Returns all devices that successfully opened, ignoring errors.
+    pub fn open_all(&self) -> Vec<InputDevice> {
+        self.open_all_with(|_| true)
     }
 
     fn attempt_open_device_with_retry(&self, info: &DeviceInfo) -> CruilResult<InputDevice> {

@@ -1,4 +1,10 @@
 #![doc = include_str!("../../README.md")]
+//!
+//! # Example
+//! From `examples/player_one.rs`:
+//! ```no_run
+#![doc = include_str!("../examples/player_one.rs")]
+//! ```
 
 mod constants;
 pub use constants::*;
