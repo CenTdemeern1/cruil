@@ -10,26 +10,64 @@ use bitflags::bitflags;
 use raw::*;
 
 bitflags! {
+    /// A set of modifier keys, as bits.
+    ///
+    /// This is a [`bitflags`](::bitflags) struct.
+    /// You can compare this set with its constants to see whether one or more modifiers are (or aren't) pressed.
+    ///
+    /// For example:
+    /// ```
+    /// # use cruil::keyboard::*;
+    /// // Let's pretend we got these from a KeyboardInputState
+    /// let buttons = Modifiers::LCTRL | Modifiers::RSHIFT;
+    ///
+    /// // Checks whether left ctrl is pressed
+    /// assert!(buttons.contains(Modifiers::LCTRL));
+    ///
+    /// // This checks whether *any* ctrl key is pressed.
+    /// // Modifiers::CTRL is LCTRL | RCTRL, so
+    /// // Modifiers::contains() would check if *both* are pressed.
+    /// assert!(buttons.intersects(Modifiers::CTRL));
+    ///
+    /// assert_eq!(
+    ///     // Which shift key is pressed?
+    ///     buttons.intersection(Modifiers::SHIFT),
+    ///     // The right one
+    ///     Modifiers::RIGHT
+    /// );
+    /// ```
     #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Hash)]
     pub struct Modifiers: u8 {
+        /// Left control.
         const LCTRL  = 0b00000001;
+        /// Left shift.
         const LSHIFT = 0b00000010;
+        /// Left alt.
         const LALT   = 0b00000100;
+        /// Left super/meta/gui/win.
         const LSUPER = 0b00001000;
+        /// Right control.
         const RCTRL  = 0b00010000;
+        /// Right shift.
         const RSHIFT = 0b00100000;
+        /// Right alt.
         const RALT   = 0b01000000;
+        /// Right super/meta/gui/win.
         const RSUPER = 0b10000000;
 
+        /// Both control keys.
         const CTRL = Self::LCTRL.bits() | Self::RCTRL.bits();
+        /// Both shift keys.
         const SHIFT = Self::LSHIFT.bits() | Self::RSHIFT.bits();
+        /// Both alt keys.
         const ALT = Self::LALT.bits() | Self::RALT.bits();
+        /// Both super/meta/gui/win keys.
         const SUPER = Self::LSUPER.bits() | Self::RSUPER.bits();
     }
 }
 
 impl Modifiers {
-    pub const MODIFIER_NAME_MAP: [(Modifiers, &str); 8] = [
+    pub(crate) const MODIFIER_NAME_MAP: [(Modifiers, &str); 8] = [
         (Self::LCTRL, "LControl"),
         (Self::LSHIFT, "LShift"),
         (Self::LALT, "LAlt"),

@@ -2,8 +2,11 @@
 
 use super::*;
 use crate::*;
-use hidapi::{HidDevice, MAX_REPORT_DESCRIPTOR_SIZE};
+use hidapi::HidDevice;
 
+/// A mouse device. Represents a HID mouse.
+///
+/// This is usually equivalent to a single physical mouse, but any singular physical USB device could pretend to be any number of mice.
 pub struct MouseDevice {
     device: HidDevice,
     last_pressed: MouseButtons,
@@ -12,10 +15,6 @@ pub struct MouseDevice {
 
 impl MouseDevice {
     pub(crate) fn new(device: HidDevice) -> Self {
-        // let mut buf = [0; MAX_REPORT_DESCRIPTOR_SIZE];
-        // let read = device.get_report_descriptor(&mut buf).unwrap();
-        // println!("{:X?}", &buf[..read]);
-        // panic!("Stop");
         Self {
             buffer: [0; _],
             last_pressed: Default::default(),
