@@ -1,4 +1,4 @@
-use crate::{CruilError, CruilResult, DeviceKind, InputDevice, ReadableDevice as _};
+use crate::{CruilError, CruilResult, DeviceKind, InputDevice};
 use hidapi::{DeviceInfo, HidApi, HidError};
 
 pub struct Cruil {
