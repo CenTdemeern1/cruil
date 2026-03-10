@@ -47,4 +47,73 @@ pub trait ReadableDevice {
     /// - If `blocking` is `true`: Blocks and waits for the next report, then parses and returns that.
     /// - If `blocking` is `false`: Creates a "ghost report" that reports the state as unchanged from the previous report.
     fn read(&mut self, blocking: bool) -> CruilResult<Self::State>;
+
+    /// Returns a [reusable](ReadableDeviceIter#reusability) iterator that polls the `ReadableDevice`.
+    fn iter(&mut self) -> ReadableDeviceIter<'_, Self> {
+        ReadableDeviceIter { device: self }
+    }
+
+    /// Consumes `self` and creates an [`OwnedReadableDeviceIter`].
+    ///
+    /// Equivalent to [`IntoIterator::into_iter`].
+    /// Types implementing `ReadableDevice` should implement [`IntoIterator`] by calling this function when possible.
+    #[doc(alias = "into_iter")]
+    fn owned_iter(self) -> OwnedReadableDeviceIter<Self>
+    where
+        Self: Sized,
+    {
+        OwnedReadableDeviceIter { device: self }
+    }
+}
+
+/// `ReadableDeviceIter` implements [`Iterator`] by calling [`try_read`](ReadableDevice::try_read) in the [`next`](Self::next) function.
+///
+/// # Reusability
+/// This iterator returns [`Some`] upon a successful read or an error, and [`None`] otherwise.
+/// This means this iterator can start returning [`Some`] again after it returns [`None`].
+///
+/// For this reason, `ReadableDeviceIter` does not implement [`FusedIterator`](std::iter::FusedIterator).
+pub struct ReadableDeviceIter<'r, T: ReadableDevice + ?Sized> {
+    device: &'r mut T,
+}
+
+impl<T: ReadableDevice> Iterator for ReadableDeviceIter<'_, T> {
+    type Item = CruilResult<T::State>;
+
+    #[doc(alias = "try_read")]
+    fn next(&mut self) -> Option<Self::Item> {
+        match self.device.try_read() {
+            Ok(Some(v)) => Some(Ok(v)),
+            Ok(None) => None,
+            Err(e) => Some(Err(e)),
+        }
+    }
+}
+
+/// A [`ReadableDeviceIter`] that owns the [`ReadableDevice`],
+/// obtained through [`ReadableDevice::owned_iter`], or an [`IntoIterator::into_iter`] implementation.
+///
+/// See [`ReadableDeviceIter`] for reusability and panic semantics.
+pub struct OwnedReadableDeviceIter<T: ReadableDevice> {
+    device: T,
+}
+
+impl<T: ReadableDevice> OwnedReadableDeviceIter<T> {
+    /// Consumes the `OwnedReadableDeviceIter` and returns the inner device `T`.
+    pub fn into_inner(self) -> T {
+        self.device
+    }
+}
+
+impl<T: ReadableDevice> Iterator for OwnedReadableDeviceIter<T> {
+    type Item = CruilResult<T::State>;
+
+    #[doc(alias = "try_read")]
+    fn next(&mut self) -> Option<Self::Item> {
+        match self.device.try_read() {
+            Ok(Some(v)) => Some(Ok(v)),
+            Ok(None) => None,
+            Err(e) => Some(Err(e)),
+        }
+    }
 }

@@ -97,3 +97,13 @@ impl ReadableDevice for MouseDevice {
         self.parse_internal_buffer(report_length)
     }
 }
+
+impl IntoIterator for MouseDevice {
+    type IntoIter = OwnedReadableDeviceIter<Self>;
+    type Item = CruilResult<MouseInputState>;
+
+    #[doc(alias = "owned_iter")]
+    fn into_iter(self) -> Self::IntoIter {
+        self.owned_iter()
+    }
+}

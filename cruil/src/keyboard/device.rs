@@ -106,3 +106,13 @@ impl ReadableDevice for KeyboardDevice {
         self.parse_internal_buffer(report_length)
     }
 }
+
+impl IntoIterator for KeyboardDevice {
+    type IntoIter = OwnedReadableDeviceIter<Self>;
+    type Item = CruilResult<KeyboardInputState>;
+
+    #[doc(alias = "owned_iter")]
+    fn into_iter(self) -> Self::IntoIter {
+        self.owned_iter()
+    }
+}
