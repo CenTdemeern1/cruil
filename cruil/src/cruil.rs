@@ -104,7 +104,7 @@ impl Cruil {
             #[cfg(feature = "debug_logging")]
             println!("Performing read check...");
             if let Err(CruilError::HidApi(HidError::HidApiError { message })) =
-                device.read_raw(false)
+                device.read_internal_buffer(false)
                 && message.contains("0xE0005000")
             {
                 return Err(CruilError::PipeStalled);

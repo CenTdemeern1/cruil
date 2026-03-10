@@ -35,21 +35,14 @@ impl KeyboardDevice {
     pub fn is_set_pressed(&self, set: KeySet) -> bool {
         set.is_subset(&self.last_pressed)
     }
-}
 
-impl ReadableDevice for KeyboardDevice {
-    type State = KeyboardInputState;
-
-    fn read_raw(&mut self, blocking: bool) -> CruilResult<&[u8]> {
+    pub(crate) fn read_internal_buffer(&mut self, blocking: bool) -> CruilResult<usize> {
         self.device.set_blocking_mode(blocking)?;
-        let read = self.device.read(&mut self.buffer)?;
-        let report = &self.buffer[..read];
-        Ok(report)
+        Ok(self.device.read(&mut self.buffer)?)
     }
 
-    fn read(&mut self, blocking: bool) -> CruilResult<Self::State> {
-        let report = self.read_raw(blocking)?;
-        let report_length = report.len();
+    fn parse_internal_buffer(&mut self, report_length: usize) -> CruilResult<KeyboardInputState> {
+        let report = &self.buffer[..report_length];
         let overflow = report.get(2) == Some(&raw::KEY_ERR_OVF);
 
         if report_length == 0 || overflow {
@@ -87,5 +80,29 @@ impl ReadableDevice for KeyboardDevice {
             just_pressed,
             just_released,
         })
+    }
+}
+
+impl ReadableDevice for KeyboardDevice {
+    type State = KeyboardInputState;
+
+    fn read_raw(&self, buffer: &mut [u8], blocking: bool) -> CruilResult<usize> {
+        self.device.set_blocking_mode(blocking)?;
+        Ok(self.device.read(buffer)?)
+    }
+
+    fn try_read(&mut self) -> CruilResult<Option<Self::State>> {
+        let report_length = self.read_internal_buffer(false)?;
+
+        if report_length == 0 {
+            return Ok(None);
+        }
+
+        self.parse_internal_buffer(report_length).map(Some)
+    }
+
+    fn read(&mut self, blocking: bool) -> CruilResult<Self::State> {
+        let report_length = self.read_internal_buffer(blocking)?;
+        self.parse_internal_buffer(report_length)
     }
 }

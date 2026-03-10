@@ -47,15 +47,45 @@ impl InputDevice {
             _ => None,
         }
     }
+
+    /// Returns whether this `InputDevice` is a [`Keyboard`].
+    pub fn is_keyboard(&self) -> bool {
+        matches!(self, Keyboard(_))
+    }
+
+    /// Returns whether this `InputDevice` is a [`Mouse`].
+    pub fn is_mouse(&self) -> bool {
+        matches!(self, Mouse(_))
+    }
+
+    /// This is a hack that's mainly present to help perform the read check.
+    pub(crate) fn read_internal_buffer(&mut self, blocking: bool) -> CruilResult<usize> {
+        match self {
+            Keyboard(keyboard_device) => keyboard_device.read_internal_buffer(blocking),
+            Mouse(mouse_device) => mouse_device.read_internal_buffer(blocking),
+        }
+    }
 }
 
 impl ReadableDevice for InputDevice {
     type State = InputState;
 
-    fn read_raw(&mut self, blocking: bool) -> CruilResult<&[u8]> {
+    /// The output from `<InputDevice as ReadableDevice>::read_raw` does not have an easy way to tell
+    /// what kind of device the data was read from, or how to parse it.
+    ///
+    /// Consider using [`is_keyboard`](Self::is_keyboard) or [`is_mouse`](Self::is_mouse)
+    /// if you need to use `read_raw` on an `InputDevice` that hasn't been narrowed down yet.
+    fn read_raw(&self, buffer: &mut [u8], blocking: bool) -> CruilResult<usize> {
         match self {
-            Keyboard(keyboard_device) => keyboard_device.read_raw(blocking),
-            Mouse(mouse_device) => mouse_device.read_raw(blocking),
+            Keyboard(keyboard_device) => keyboard_device.read_raw(buffer, blocking),
+            Mouse(mouse_device) => mouse_device.read_raw(buffer, blocking),
+        }
+    }
+
+    fn try_read(&mut self) -> CruilResult<Option<Self::State>> {
+        match self {
+            Keyboard(k_device) => k_device.try_read().map(|o| o.map(InputState::Keyboard)),
+            Mouse(m_device) => m_device.try_read().map(|o| o.map(InputState::Mouse)),
         }
     }
 

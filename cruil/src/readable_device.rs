@@ -20,10 +20,11 @@ pub trait ReadableDevice {
     /// The type of the parsed input state associated with this type of device.
     type State;
 
-    /// Reads a HID report, and returns the raw bytes.
+    /// Reads the raw bytes of a HID report into the given buffer, returning how many bytes were read.
     ///
-    /// Because `read_raw` does not parse the read data,
-    /// it also doesn't update the internal state using said parsed data.
+    /// It is generally recommended to use a buffer of at least [`MAX_HID_PACKET_SIZE`](crate::MAX_HID_PACKET_SIZE) bytes.
+    ///
+    /// `read_raw` does not parse the read data or update the internal state using said parsed data.
     ///
     /// [`read`](Self::read) uses this parsed data and internal state to track which keys were "just pressed"
     /// or "just released", so calling this function will make [`read`](Self::read) miss this frame and possibly drop the input.
@@ -31,14 +32,14 @@ pub trait ReadableDevice {
     /// If no report is available, the behavior depends on the value of `blocking`:
     /// - If `blocking` is `true`: Blocks and waits for the next report, then returns that.
     /// - If `blocking` is `false`: Returns an empty slice.
-    ///
-    /// The returned slice is a reference to the internal buffer.
-    fn read_raw(&mut self, blocking: bool) -> CruilResult<&[u8]>;
+    fn read_raw(&self, buffer: &mut [u8], blocking: bool) -> CruilResult<usize>;
 
     /// Reads and parses a HID report, and returns it, if one is available.
     ///
-    /// This method does not block and returns [`None`] if no report is available.
-    fn try_read(&mut self) -> Option<CruilResult<Self::State>>;
+    /// This function reads the raw report into the internal buffer, and thus requires a mutable reference.
+    ///
+    /// This method does not block and returns <code>[Ok]\([None])</code> if no report is available.
+    fn try_read(&mut self) -> CruilResult<Option<Self::State>>;
 
     /// Reads and parses a HID report, and returns it.
     ///

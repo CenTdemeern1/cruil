@@ -27,26 +27,17 @@ impl MouseDevice {
     pub fn are_buttons_pressed(&self, buttons: MouseButtons) -> bool {
         self.last_pressed.contains(buttons)
     }
-}
 
-impl ReadableDevice for MouseDevice {
-    type State = MouseInputState;
-
-    fn read_raw(&mut self, blocking: bool) -> CruilResult<&[u8]> {
+    pub(crate) fn read_internal_buffer(&mut self, blocking: bool) -> CruilResult<usize> {
         self.device.set_blocking_mode(blocking)?;
-        let read = self.device.read(&mut self.buffer)?;
-        let report = if read != 0 {
-            &self.buffer[1..read] // Skip report ID
-        } else {
-            &self.buffer[..0]
-        };
-        Ok(report)
+        Ok(self.device.read(&mut self.buffer)?)
     }
 
-    fn read(&mut self, blocking: bool) -> CruilResult<Self::State> {
-        let report = self.read_raw(blocking)?;
-        let report_length = report.len();
-
+    /// This is an implementation to parse one type of mouse which I hope is common.
+    /// It does not correctly parse my daily driver mouse.
+    /// To properly parse mice, I think I need to parse the report descriptor.
+    /// This might be good for keyboards too(?), we'll have to see when I get there.
+    fn parse_internal_buffer(&mut self, report_length: usize) -> CruilResult<MouseInputState> {
         if report_length == 0 {
             // Gracefully handle no response by returning last known state
             return Ok(MouseInputState {
@@ -55,13 +46,15 @@ impl ReadableDevice for MouseDevice {
             });
         }
 
+        let report = &self.buffer[1..report_length]; // Skip report ID
+
         if report_length < 4 {
             return Err(CruilError::ProtocolViolation(
                 ProtocolViolation::ResponseTooShort(report_length),
             ));
         }
 
-        let currently_pressed = MouseButtons::from_bits_retain(report[0]);
+        let currently_pressed = MouseButtons::from_bits_retain(report[0]); // 8 bits of buttons
         let delta_x = (i16::from_le_bytes([report[1], report[2]]) << 4) >> 4;
         let delta_y = i16::from_le_bytes([report[2], report[3]]) >> 4;
         let delta_wheel = report.get(4).copied().unwrap_or_default().cast_signed();
@@ -79,5 +72,29 @@ impl ReadableDevice for MouseDevice {
             just_released,
             delta_wheel,
         })
+    }
+}
+
+impl ReadableDevice for MouseDevice {
+    type State = MouseInputState;
+
+    fn read_raw(&self, buffer: &mut [u8], blocking: bool) -> CruilResult<usize> {
+        self.device.set_blocking_mode(blocking)?;
+        Ok(self.device.read(buffer)?)
+    }
+
+    fn try_read(&mut self) -> CruilResult<Option<Self::State>> {
+        let report_length = self.read_internal_buffer(false)?;
+
+        if report_length == 0 {
+            return Ok(None);
+        }
+
+        self.parse_internal_buffer(report_length).map(Some)
+    }
+
+    fn read(&mut self, blocking: bool) -> CruilResult<Self::State> {
+        let report_length = self.read_internal_buffer(blocking)?;
+        self.parse_internal_buffer(report_length)
     }
 }
