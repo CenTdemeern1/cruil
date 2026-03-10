@@ -27,9 +27,9 @@ bitflags! {
         const RIGHT    = 0b00000010;
         /// Middle mouse button. (Clicking the scroll wheel)
         const MIDDLE   = 0b00000100;
-        /// The back button, also called Mouse4. (Often located on the side of a mouse)
+        /// The back button, also known as Mouse4. (Often located on the side of a mouse)
         const BACK     = 0b00001000;
-        /// The forward button, also called Mouse5. (Often located on the side of a mouse)
+        /// The forward button, also known as Mouse5. (Often located on the side of a mouse)
         const FORWARD  = 0b00010000;
         const UNKNOWN6 = 0b00100000;
         const UNKNOWN7 = 0b01000000;
