@@ -6,6 +6,14 @@
 
 On supported operating systems, this also includes Bluetooth HID devices.
 
+> [!WARNING]
+> cruil is still really early in development.
+>
+> The entire API may change in the future.
+>
+> See ["Currently broken/WIP/unimplemented"](#currently-brokenwipunimplemented)
+> for a list of current limitations.
+
 ## Why is this useful?
 
 Some ideas:
@@ -14,14 +22,22 @@ Some ideas:
 - Software to create a large emoji keyboard, [à la Tom Scott](https://www.youtube.com/watch?v=3AtBE9BOvvk), [but without the bodge](https://www.youtube.com/watch?v=lIFE7h3m40U)
 - Multi-seat software that uses multiple mice to create multiple pointers on one screen
 
-## Operating system quirks
+## What cruil does NOT do
+
+- Handle keyboard layouts (as of now, this may change in the future if necessary)
+- Map keys or key combinations to typed characters (out of scope)
+
+## Currently broken/WIP/unimplemented
+
+- Report descriptor parsing, which breaks:
+    - Linux, BSD, and other Unix support
+    - A lot of mice
+- Linux, BSD, and other Unix: Bluetooth
+    - dependency limitation, will look into solving this in the future
+
+### Operating system quirks
 
 Cruil uses [hidapi](https://github.com/libusb/hidapi) under the hood, so it inherits a lot of the same limitations:
 - Windows: everything should just work
 - macOS: requires input monitoring permissions
 - Linux, BSD, and other Unix: uses the libusb backend, so Bluetooth is unsupported
-
-## What cruil does NOT do
-
-- Handle keyboard layouts (as of now, this may change in the future if necessary)
-- Map keys or key combinations to typed characters
