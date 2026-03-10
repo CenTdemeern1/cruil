@@ -1,3 +1,7 @@
 [workspace]
 resolver = "3"
 members = ["cruil", "cruil-debug"]
+
+[workspace.package]
+homepage = "https://github.com/CenTdemeern1/cruil"
+repository = "https://github.com/CenTdemeern1/cruil"
