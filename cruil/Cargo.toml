@@ -2,6 +2,7 @@
 name = "cruil"
 version = "0.1.0"
 edition = "2024"
+license.workspace = true
 description = "Raw HID input library that can distinguish between different keyboards and mice"
 homepage.workspace = true
 repository.workspace = true

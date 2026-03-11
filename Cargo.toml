@@ -3,5 +3,6 @@ resolver = "3"
 members = ["cruil", "cruil-debug"]
 
 [workspace.package]
+license = "MIT OR Apache-2.0"
 homepage = "https://github.com/CenTdemeern1/cruil"
 repository = "https://github.com/CenTdemeern1/cruil"
