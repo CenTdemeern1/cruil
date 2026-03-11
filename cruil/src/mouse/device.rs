@@ -22,7 +22,9 @@ impl MouseDevice {
         }
     }
 
-    /// Returns whether the given mouse buttons are pressed.
+    /// Returns whether the given mouse buttons are pressed in the internal state.
+    ///
+    /// The internal state updates after any calls to [`read`](Self::read) or [`Self::try_read`].
     pub fn are_buttons_pressed(&self, buttons: MouseButtons) -> bool {
         self.last_pressed.contains(buttons)
     }

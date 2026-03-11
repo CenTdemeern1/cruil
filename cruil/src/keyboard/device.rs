@@ -21,17 +21,23 @@ impl KeyboardDevice {
         }
     }
 
-    /// Returns whether the given key is pressed.
+    /// Returns whether the given key is pressed in the internal state.
+    ///
+    /// The internal state updates after any calls to [`read`](Self::read) or [`try_read`](Self::try_read).
     pub fn is_key_pressed(&self, key: &Key) -> bool {
         self.last_pressed.contains_key(key)
     }
 
-    /// Returns whether the given modifier keys are pressed.
+    /// Returns whether the given modifier keys are pressed in the internal state.
+    ///
+    /// The internal state updates after any calls to [`read`](Self::read) or [`try_read`](Self::try_read).
     pub fn are_modifiers_pressed(&self, modifiers: Modifiers) -> bool {
         self.last_pressed.contains_modifiers(modifiers)
     }
 
-    /// Returns whether all the keys in the given set are pressed.
+    /// Returns whether all the keys in the given set are pressed in the internal state.
+    ///
+    /// The internal state updates after any calls to [`read`](Self::read) or [`try_read`](Self::try_read).
     pub fn is_set_pressed(&self, set: KeySet) -> bool {
         set.is_subset(&self.last_pressed)
     }
