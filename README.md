@@ -18,7 +18,7 @@ On supported operating systems, this also includes Bluetooth HID devices.
 ## Why is this useful?
 
 Some ideas:
-- Local multi-player video games that use keyboards and mice
+- Local/Splitscreen multi-player video games that use multiple keyboards and mice for multiple players
 - Simulation software that uses multiple keyboards to create large control panels
 - Software to create a large emoji keyboard, [à la Tom Scott](https://www.youtube.com/watch?v=3AtBE9BOvvk), [but without the bodge](https://www.youtube.com/watch?v=lIFE7h3m40U)
 - Multi-seat software that uses multiple mice to create multiple pointers on one screen
