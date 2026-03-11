@@ -1,4 +1,4 @@
-#![doc = include_str!("../../README.md")]
+#![doc = include_str!("../README.md")]
 //!
 //! # Example
 //! From `examples/player_one.rs`:
