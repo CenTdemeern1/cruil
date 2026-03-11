@@ -40,4 +40,14 @@ impl InputState {
             _ => None,
         }
     }
+
+    /// Returns whether this `InputState` is a [`Keyboard`].
+    pub fn is_keyboard(&self) -> bool {
+        matches!(self, Keyboard(_))
+    }
+
+    /// Returns whether this `InputState` is a [`Mouse`].
+    pub fn is_mouse(&self) -> bool {
+        matches!(self, Mouse(_))
+    }
 }
