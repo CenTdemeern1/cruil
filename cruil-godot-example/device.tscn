@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://cw1po5taxh8yk"]
+
+[ext_resource type="Script" uid="uid://c17sf6m1h47p6" path="res://device.gd" id="1_1ahxv"]
+[ext_resource type="Texture2D" uid="uid://dsrnu6qt5quib" path="res://mouse.svg" id="2_ta4dp"]
+[ext_resource type="Texture2D" uid="uid://c5bcbai6oamhh" path="res://keyboard.svg" id="3_5hygy"]
+
+[node name="Device" type="Control" unique_id=2005703283]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_1ahxv")
+
+[node name="ReferenceRect" type="ReferenceRect" parent="." unique_id=1167435107]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+border_color = Color(0.6255971, 0.6255972, 0.6255967, 1)
+border_width = 20.0
+editor_only = false
+
+[node name="Icons" type="Control" parent="ReferenceRect" unique_id=312792819]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Mouse" type="Sprite2D" parent="ReferenceRect/Icons" unique_id=2126358686]
+unique_name_in_owner = true
+visible = false
+texture = ExtResource("2_ta4dp")
+
+[node name="Keyboard" type="Sprite2D" parent="ReferenceRect/Icons" unique_id=576120166]
+unique_name_in_owner = true
+visible = false
+texture = ExtResource("3_5hygy")

@@ -1,17 +1,12 @@
-use cruil::{InputDevice, ThreadedReader};
-use godot::{
-    global::{Error, push_error},
-    prelude::*,
-};
-use std::collections::HashMap;
+use crate::device::CruilDevice;
+use cruil::ThreadedReader;
+use godot::prelude::*;
 
 /// Singleton for Cruil's Godot bindings.
 #[derive(GodotClass)]
 #[class(init, singleton, base = Object)]
 pub struct Cruil {
     cruil: Option<cruil::Cruil>,
-    devices: HashMap<usize, ThreadedReader<InputDevice>>,
-    unused_id: usize,
 
     base: Base<Object>,
 }
@@ -19,12 +14,6 @@ pub struct Cruil {
 impl Cruil {
     fn push_uninitialized_error() {
         godot_error!("Attempt to call Cruil function while Cruil is uninitialized");
-    }
-
-    fn postfix_increment(n: &mut usize) -> usize {
-        let old_n = *n;
-        *n += 1;
-        old_n
     }
 }
 
@@ -52,18 +41,17 @@ impl Cruil {
     }
 
     #[func]
-    pub fn open_all(&mut self) {
+    pub fn open_all(&mut self) -> Vec<Gd<CruilDevice>> {
         let Some(cruil) = &mut self.cruil else {
             Self::push_uninitialized_error();
-            return;
+            return vec![];
         };
         cruil.refresh().unwrap();
-        self.devices
-            .extend(cruil.open_all().into_iter().map(|device| {
-                (
-                    Self::postfix_increment(&mut self.unused_id),
-                    ThreadedReader::start(device),
-                )
-            }));
+        cruil
+            .open_all()
+            .into_iter()
+            .map(ThreadedReader::start)
+            .map(CruilDevice::new)
+            .collect()
     }
 }

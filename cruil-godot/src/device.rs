@@ -1,12 +1,10 @@
+use crate::event::CruilEvent;
 use cruil::{InputDevice, ThreadedReader};
 use godot::{
-    classes::{Engine, Input, InputEvent, InputEventKey, MainLoop},
+    classes::{Engine, Input},
     prelude::*,
     register::ConnectHandle,
 };
-use std::{mem::swap, num::NonZeroI32};
-
-use crate::event::CruilEvent;
 
 /// An open Cruil input device.
 #[derive(GodotClass)]
@@ -46,10 +44,12 @@ impl CruilDevice {
             self.disconnect();
             return;
         }
-        let input = Input::singleton();
+        let mut input = Input::singleton();
         while let Some(event) = self.get_input_event() {
-            for event in event.to_events() {
-                input.parse_input_event(event);
+            // TODO: Don't require the use of bind() and just get an event without the godot call
+            for mut event in event.bind().to_events() {
+                event.set_device(self.id);
+                input.parse_input_event(&event);
             }
         }
     }
