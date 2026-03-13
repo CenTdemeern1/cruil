@@ -11,4 +11,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 cruil = { path = "../cruil" }
-godot = { path = "../../godot-rust/godot", features = ["register-docs"] }
+godot = { version = "0.4.5", features = ["register-docs"] }
