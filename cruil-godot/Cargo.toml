@@ -1,0 +1,14 @@
+[package]
+name = "cruil-godot"
+version = "0.1.0"
+edition = "2024"
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+cruil = { path = "../cruil" }
+godot = { path = "../../godot-rust/godot", features = ["register-docs"] }

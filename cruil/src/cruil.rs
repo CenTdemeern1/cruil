@@ -10,9 +10,6 @@ impl Cruil {
     /// Create a new instance of Cruil.
     ///
     /// Each instance has its own copy of [`HidApi`] with its own device cache.
-    ///
-    /// Aside from allocating a new device cache,
-    /// creating multiple copies of Cruil is fairly cheap.
     pub fn new() -> CruilResult<Self> {
         let hid = HidApi::new()?;
 

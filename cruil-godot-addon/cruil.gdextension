@@ -1,0 +1,12 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.5
+reloadable = true
+
+[libraries]
+linux.debug = "res://addons/cruil-godot/compiled/target/debug/libcruil_godot.so"
+linux.release = "res://addons/cruil-godot/compiled/target/release/libcruil_godot.so"
+windows.debug = "res://addons/cruil-godot/compiled/target/debug/cruil_godot.dll"
+windows.release = "res://addons/cruil-godot/compiled/target/release/cruil_godot.dll"
+macos.debug = "res://addons/cruil-godot/compiled/target/debug/libcruil_godot.dylib"
+macos.release = "res://addons/cruil-godot/compiled/target/release/libcruil_godot.dylib"
