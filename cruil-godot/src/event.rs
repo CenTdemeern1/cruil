@@ -3,7 +3,7 @@ use std::ops::BitOr;
 use cruil::{
     InputState,
     keyboard::{KeySet, KeyboardInputState, keys::Modifiers},
-    mouse::{MouseButtons, MouseInputState},
+    mouse::MouseButtons,
 };
 use godot::{
     classes::{InputEvent, InputEventKey, InputEventMouseButton, InputEventMouseMotion},
