@@ -30,6 +30,7 @@ Some ideas:
 
 ## Currently broken/WIP/unimplemented
 
+- Windows support
 - Report descriptor parsing, which breaks:
     - Linux, BSD, and other Unix support
     - A lot of keyboards and mice
@@ -40,6 +41,6 @@ Some ideas:
 ### Operating system quirks
 
 Cruil uses [hidapi](https://github.com/libusb/hidapi) under the hood, so it inherits a lot of the same limitations:
-- Windows: everything should just work
+- Windows: ~~everything should just work~~ needs a new backend
 - macOS: requires input monitoring permissions
 - Linux, BSD, and other Unix: uses the libusb backend, so Bluetooth is unsupported
