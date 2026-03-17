@@ -1,5 +1,5 @@
 use crate::CruilResult;
-use hidapi::{DeviceInfo, HidApi, MAX_REPORT_DESCRIPTOR_SIZE};
+use hidapi::DeviceInfo;
 
 /// An enum containing cruil's built-in supported device kinds, [`Keyboard`] and [`Mouse`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -8,7 +8,6 @@ pub enum DeviceKind {
     Mouse,
 }
 use DeviceKind::*;
-use hidparser::ReportField;
 
 impl DeviceKind {
     /// Tries to figure out what kind of device the [`DeviceInfo`] is describing.
