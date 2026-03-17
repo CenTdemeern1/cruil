@@ -28,10 +28,6 @@ impl DeviceKind {
         // This API will hopefully become private anyway and the type of device will be provided by the library
         // Also something something multiple backends
         // This must not end up in a release in this state!
-        let device_kind = Self::from_info(info);
-        if !matches!(device_kind, Ok(Mouse)) {
-            return device_kind;
-        }
         let hid = HidApi::new()?;
         let device = info.open_device(&hid)?;
         let mut buffer = [0; MAX_REPORT_DESCRIPTOR_SIZE];
