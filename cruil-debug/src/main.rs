@@ -7,14 +7,14 @@ use cruil::*;
 fn main() {
     let mut cruil = Cruil::new().unwrap();
 
-    // let keyboard = cruil
-    //     .open_first_available_with(|d| {
-    //         d.product_string()
-    //             .is_some_and(|v| v.starts_with("Microsoft"))
-    //             && matches!(DeviceKind::from_info(d), Ok(DeviceKind::Keyboard))
-    //     })
-    //     .expect("Could not find/open Microsoft keyboard");
-    // println!("Opened Microsoft keyboard");
+    let keyboard = cruil
+        .open_first_available_with(|d| {
+            d.product_string()
+                .is_some_and(|v| v.starts_with("Microsoft"))
+                && matches!(DeviceKind::from_info(d), Ok(DeviceKind::Keyboard))
+        })
+        .expect("Could not find/open Microsoft keyboard");
+    println!("Opened Microsoft keyboard");
 
     // let mouse = cruil
     //     .open_first_available_with(|d| {
@@ -25,16 +25,16 @@ fn main() {
     //     .expect("Could not find/open Logi mouse");
     // println!("Opened Logi mouse");
 
-    let mouse = cruil
-        .open_first_available_with(|d| {
-            d.product_string()
-                .is_some_and(|v| v.starts_with("USB OPTICAL MOUSE"))
-                && matches!(DeviceKind::from_info(d), Ok(DeviceKind::Mouse))
-        })
-        .expect("Could not find/open trash mouse");
-    println!("Opened trash mouse");
+    // let mouse = cruil
+    //     .open_first_available_with(|d| {
+    //         d.product_string()
+    //             .is_some_and(|v| v.starts_with("USB OPTICAL MOUSE"))
+    //             && matches!(DeviceKind::from_info(d), Ok(DeviceKind::Mouse))
+    //     })
+    //     .expect("Could not find/open trash mouse");
+    // println!("Opened trash mouse");
 
-    test_blocking(mouse)
+    test_blocking(keyboard)
 }
 
 fn test_blocking(mut device: InputDevice) -> ! {

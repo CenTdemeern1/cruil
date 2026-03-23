@@ -10,6 +10,9 @@ pub enum DeviceKind {
 use DeviceKind::*;
 
 impl DeviceKind {
+    pub(crate) const KEYBOARD_USAGE: (u16, u16) = (1, 6);
+    pub(crate) const MOUSE_USAGE: (u16, u16) = (1, 2);
+
     /// Tries to figure out what kind of device the [`DeviceInfo`] is describing.
     /// This is achieved through looking at its Usage info.
     ///
@@ -18,9 +21,17 @@ impl DeviceKind {
     #[cfg(not(any(target_os = "windows", target_os = "linux")))]
     pub fn from_info(info: &DeviceInfo) -> CruilResult<DeviceKind> {
         match (info.usage_page(), info.usage()) {
-            (1, 6) => Ok(Keyboard),
-            (1, 2) => Ok(Mouse),
+            Self::KEYBOARD_USAGE => Ok(Keyboard),
+            Self::MOUSE_USAGE => Ok(Mouse),
             (p, u) => Err(crate::CruilError::UnsupportedDeviceKind(p, u)),
+        }
+    }
+
+    /// Returns (page, usage)
+    pub(crate) fn to_hid_usage(self) -> (u16, u16) {
+        match self {
+            Keyboard => Self::KEYBOARD_USAGE,
+            Mouse => Self::MOUSE_USAGE,
         }
     }
 }

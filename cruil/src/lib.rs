@@ -6,6 +6,14 @@
 #![doc = include_str!("../examples/player_one.rs")]
 //! ```
 
+// Private modules
+mod backend;
+
+// Public modules
+pub mod keyboard;
+pub mod mouse;
+
+// Re-exported modules
 mod constants;
 pub use constants::*;
 mod device_kind;
@@ -22,5 +30,3 @@ mod cruil;
 pub use cruil::*;
 mod error;
 pub use error::*;
-pub mod keyboard;
-pub mod mouse;
