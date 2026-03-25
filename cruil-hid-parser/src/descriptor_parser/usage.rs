@@ -50,4 +50,11 @@ impl UsageSet {
             }
         }
     }
+
+    pub fn is_padding(&self) -> bool {
+        match self {
+            UsageSet::List(usages) => usages.is_empty(),
+            UsageSet::Range(_, _) => false,
+        }
+    }
 }

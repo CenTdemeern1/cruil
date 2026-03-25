@@ -4,14 +4,14 @@ mod item;
 use item::*;
 
 mod report;
-use report::*;
+pub use report::*;
 
 mod usage;
 pub use usage::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default, Hash)]
 pub struct ReportDescriptor {
-    reports: Vec<Report>,
+    pub reports: Vec<Report>,
 }
 
 impl ReportDescriptor {

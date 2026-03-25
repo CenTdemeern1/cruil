@@ -1,6 +1,6 @@
 use crate::bytes::take1;
 use ItemType::*;
-use nom::{IResult, bytes::complete::take};
+use nom::{IResult, Parser, bytes::complete::take};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub(crate) enum ItemType {
@@ -22,7 +22,7 @@ pub(crate) struct Item<'d> {
 
 impl<'d> Item<'d> {
     pub fn parse(bytes: &'d [u8]) -> IResult<&'d [u8], Self> {
-        let (bytes, header) = take1(bytes)?;
+        let (bytes, header) = take1().parse_complete(bytes)?;
         let mut b_size = match header & 0b11 {
             n @ 0..3 => n,
             3 => 4,

@@ -7,4 +7,4 @@ homepage.workspace = true
 repository.workspace = true
 
 [dependencies]
-nom = "8.0.0"
+nom = { git = "https://github.com/CenTdemeern1/nom" }

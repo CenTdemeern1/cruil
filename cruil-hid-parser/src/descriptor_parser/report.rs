@@ -1,4 +1,4 @@
-use crate::descriptor::{Item, ItemType, Usage, UsageSet};
+use crate::descriptor_parser::{Item, ItemType, Usage, UsageSet};
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, Default)]
@@ -26,16 +26,16 @@ struct LocalStateTable {
 
 #[derive(Debug, Clone, PartialEq, Eq, Default, Hash)]
 pub struct InputField {
-    usages: UsageSet,
-    logical_range: (i32, i32),
-    report_size: u32,
-    report_count: u32,
+    pub usages: UsageSet,
+    pub logical_range: (i32, i32),
+    pub report_size: u32,
+    pub report_count: u32,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Default, Hash)]
 pub struct Report {
-    report_id: u8,
-    fields: Vec<InputField>,
+    pub report_id: u8,
+    pub fields: Vec<InputField>,
 }
 
 impl Report {
